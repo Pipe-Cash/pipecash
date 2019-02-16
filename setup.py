@@ -11,11 +11,11 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', ]
+requirements = ['Click>=6.0', 'schedule==0.5.0' ]
 
-setup_requirements = [ 'schedule' ]
+setup_requirements = [ ]
 
-test_requirements = [ 'schedule' ]
+test_requirements = [ 'schedule==0.5.0' ]
 
 setup(
     author="Aleksandar Nikolaev Dinkov",
@@ -23,7 +23,6 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
-        'License :: OPEN BLOCKCHAIN-SPECIFIC LICENSE',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.7',
