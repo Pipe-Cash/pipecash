@@ -4,8 +4,8 @@ import time
 from pipecash.observedMethod import ObservedMethod
 from pipecash.pipeObserver import Observer
 
-ArgListNoArgs = "{'args': (), 'kwargs': {}}"
-ArgListWithArgs = "{'args': (1, 2), 'kwargs': {}}"
+ArgListNoArgs = str({'args': (), 'kwargs': {}})
+ArgListWithArgs = str({'args': (1, 2), 'kwargs': {}})
 
 ResultNone = "{'result': None}"
 ResultOne = "{'result': 1}"

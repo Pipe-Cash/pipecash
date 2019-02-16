@@ -86,19 +86,16 @@ class OptionTemplateSolverTest(unittest.TestCase):
             repr(a), repr(b), resultData)
         self.assertEqual(resultData, b, assertMessage)
 
-    def test_solving_UndefinedVariable_shlouldLogProperException(self):
-        self.__solving_A_shlouldLogException_B(
-            "{{c}}", "'name 'c' is not defined'", "'name 'c' is not defined'")
+    def test_solving_UndefinedVariable_shlouldLogException(self):
+        self.__solving_A_shlouldLogException_B("{{c}}")
 
-    def test_solving_DevisionByTwo_shlouldLogProperException(self):
-        self.__solving_A_shlouldLogException_B(
-            "{{1/0}}", "'division by zero'", "'integer division or modulo by zero'")
+    def test_solving_DevisionByTwo_shlouldLogException(self):
+        self.__solving_A_shlouldLogException_B("{{1/0}}")
 
-    def test_solving_SumStringAndInt_shlouldLogProperException(self):
-        self.__solving_A_shlouldLogException_B(
-            "{{s+a}}", "'must be str, not int'", "'cannot concatenate 'str' and 'int' objects'")
+    def test_solving_SumStringAndInt_shlouldLogException(self):
+        self.__solving_A_shlouldLogException_B("{{s+a}}")
 
-    def __solving_A_shlouldLogException_B(self, expression, expectedError_py3, expectedError_py2):
+    def __solving_A_shlouldLogException_B(self, expression):
         msgStart = "Failed to evaluate expression"
         msgExMarker = "Exception: "
 
@@ -120,10 +117,3 @@ class OptionTemplateSolverTest(unittest.TestCase):
         exceptionIndex = logMock.logs[0].index(msgExMarker)+len(msgExMarker)
         exceptionMsg = logMock.logs[0][exceptionIndex:]
 
-        expectedError = expectedError_py3
-        if (sys.version_info.major == 2):
-            expectedError = expectedError_py2
-
-        self.assertEqual(exceptionMsg, expectedError,
-                         "Error was not as expected\nExpected: %s\nTo equal: %s" % (
-                             exceptionMsg, expectedError))
