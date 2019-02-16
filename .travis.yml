@@ -1,15 +1,18 @@
 language: python
-
 matrix:
-    include:
-        - python: 2.7
-        - python: 3.4
-        - python: 3.5
-        - python: 3.6
-
+  include:
+  - python: 2.7
+  - python: 3.4
+  - python: 3.5
+  - python: 3.6
 os:
-  - linux
-
+- linux
 install: pip install tox-travis
-
 script: tox
+deploy:
+  provider: pypi
+  user: bitcoinsofia
+  password:
+    secure: QCIfpzCrSn+GK/tKuTKgBWInQEKQ05zmOR6F6iGT+W9YMvBK8WPP2u2/c68YF9eIsxqFbrgg6QBJDfgUF0fkb5VYI7utss9YNfrRuWgurFK+BGuN40R5bvAt/NlpNhBVl13ggH0sg69ThpDHJ4buJui//4qOUTpu10EnVYZW+LxLjYhlbaLNjkKZ8iIzuDNww9XjSpvfrfhR7qaYOsy19ATlf1cCplBsXiMJqhfp0H+9WUBBSnNzTeNx4mpe3T2nn1Km9X0wivuQfFMasuIAmPizFDl07gKNJ8Uxq4GMxul4TShRGomzPyPUA3TY5QcycjQHavec38Q08zWejdGqIfyWy6yHdhKfM5z8rEnqYuKu+chxMyCcbI+MkzOoWBgEVSOuwpU+nYdxBXMHfl9T2Hw+5W2v8E8aOlMwKiFgcNk0cWfMcFZrf5F0e+K4roD4xc0xCU9HMwQ2fku3OBRxumMTy6FH7m+1YiH00Nr1xEFRrGahTowogru0AzsnsQlPg8CtXoxAp0K3XgJunVp/2gHdfTUvAvIRGnij0aCiAHq1M1idxWACE67kcFoCJgbQoh/DB4ayv2wBzBsKoMAUkOY5RqhLBrA8fUe6lVHZzvvuUg2/jMkQJGGjybTUTBzrNP0L27WyBI8rPeyAS33YMKBWHNM3igEX6wWTGoXycf0=
+  on:
+    tags: true
