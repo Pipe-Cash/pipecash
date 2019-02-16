@@ -1,0 +1,50 @@
+========
+pipecash
+========
+
+
+.. image:: https://img.shields.io/pypi/v/pipecash.svg
+        :target: https://pypi.python.org/pypi/pipecash
+
+.. image:: https://img.shields.io/travis/Siko91/pipecash.svg
+        :target: https://travis-ci.org/Siko91/pipecash
+
+.. image:: https://readthedocs.org/projects/pipecash/badge/?version=latest
+        :target: https://pipecash.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+
+.. image:: https://pyup.io/repos/github/Siko91/pipecash/shield.svg
+     :target: https://pyup.io/repos/github/Siko91/pipecash/
+     :alt: Updates
+
+
+
+* License: OPEN BLOCKCHAIN-SPECIFIC LICENSE
+* Documentation: https://pipecash.readthedocs.io.
+* Website: https://pipe.cash.
+
+
+A framework for easy automation of Bitcoin related tasks. PipeCash is flexible due to it's plugin system and configuration options. Read more at http://pipe.cash/
+
+Description
+------------
+
+PipeCash is a framework for automation of Bitcoin Related tasks.
+It reads a configuration (json file) and executes the appropriate tasks (called "agents") at the appropriate times, in a way similar to IFTTT.
+An agent may be scheduled (to run at specific times), controlled (to run when another agent tells it to), receive event data (when another agent produces an event), or just be started once and run in the background.
+
+Agents represent simple actions.
+* Sending an email
+* Reading a file
+* Getting specific data from the internet
+* etc...
+
+An agent can have access to a wallet and use the standard wallet interface to perform a money related task.
+Such an agent should work the same, even if it uses a different wallet, or even a different currency.
+
+
+This package contains the core functionality of PipeCash, needed to run any PipeCash instance.
+The package does not contain any PipeCash agents or wallets. They must come from separate packages.
+It does not contain any configurations either.
+At this stage users will be required to create their own configurations.

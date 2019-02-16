@@ -1,0 +1,30 @@
+OPEN BLOCKCHAIN-SPECIFIC LICENSE
+
+Copyright © 2018 Aleksandar Nikolaev Dinkov.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction other than the conditions set out below, including without limitation the rights to use, copy, modify, merge, publish, distribute, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+1.  Blockchain Limitation. The grant to deal provided above is restricted to dealing in the Software only for purposes relating to the following:
+    - Purposes related to The Bitcoin SV Blockchain
+        - defined as the Bitcoin chain with the most SHA-265 Proof of Work accomulated, following block height #560000 with this hash: 0000000000000000035cb1baaf4f82d8358a8b9ed22aec52c2801a02b9c6f18f.
+    - Purposes related to The Bitcoin Blockchain
+        - defined as the Bitcoin chain with the most SHA-265 Proof of Work accomulated, following block height #1 with this hash: 00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048.
+    - Purposes not related to cryptohraphic currencies
+        - defined as any usage of the software that does not interact in any way with any form of money, or usages of the software that interact with government issued money.
+
+    In case of competing blockchain forks, the license is valid on both chains, until one of them gains sufficient advantage over the other in terms of total acumolated hashpower.
+    A sufficient advantage is an advantage of at least 1000 blocks with the dificulty of the latest block on the chain with more acumolated hashpower.
+
+
+2.  Redistributions of all copies or substantial portions of the source code of the Software must retain the above copyright notice and above permission notice (with blockchain limitation), this list of conditions and the following disclaimer.
+
+3.  Redistributions of all copies or substantial portions of the object code of the Software must reproduce the above copyright notice and above permission notice (with blockchain limitation), this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+4.  Any work to the extent consisting of the Software or modifications made thereto, must be licensed under this license to anyone who comes into possession of a copy. regardless of how such work is packaged.  Each time such a work is conveyed to a recipient, the recipient automatically receives this license from the original licensors, to run, modify and otherwise deal with that work.
+
+5.  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OF OR OTHER DEALINGS IN THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+LICENSE APPLICABILITY
+
+This license applies to any person or entity that downloads, reproduces or obtains the Software on or after the Effective Date stated above.

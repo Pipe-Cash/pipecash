@@ -1,0 +1,18 @@
+{
+    "python.unitTest.unittestEnabled": true,
+    "python.unitTest.unittestArgs": [
+        "-v",
+        "-s",
+        "test",
+        // "-p",
+        // "test_*.py"
+    ],
+    "pythonTestExplorer.testFramework": "unittest",
+    "python.analysis.logLevel": "Warning",
+    "python.analysis.openFilesOnly": false,
+    "python.linting.pylintEnabled": false,
+
+
+    "python.pythonPath": "python",
+    "restructuredtext.confPath": "${workspaceFolder}/docs",
+}

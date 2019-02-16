@@ -1,0 +1,77 @@
+{
+  "name": "test_scenario",
+  "description": "Test scenario",
+  "author": "Aleksandar Dinkov",
+  "wallets": [
+    {
+      "module": "tests.scenario_test.mocks",
+      "type": "TestWallet",
+      "name": "Test Wallet 0",
+      "options": {}
+    },
+    {
+      "module": "tests.scenario_test.mocks",
+      "type": "TestWallet",
+      "name": "Test Wallet 1 - unused"
+    }
+  ],
+  "agents": [
+    {
+      "module": "tests.scenario_test.mocks",
+      "type": "TestAgent",
+      "name": "Agent 0 - has wallet",
+      "options": {
+        "foo": "bar"
+      },
+      "schedule": "every_1s"
+    },
+    {
+      "module": "tests.scenario_test.mocks",
+      "type": "TestAgent",
+      "name": "Agent 1 - receive",
+      "options": {
+        "foo": "bar"
+      },
+      "schedule": "every_2s"
+    },
+    {
+      "module": "tests.scenario_test.mocks",
+      "type": "TestAgent",
+      "name": "Agent 2 - receive",
+      "schedule": "every_5s"
+    },
+    {
+      "module": "tests.scenario_test.mocks",
+      "type": "TestAgent",
+      "name": "Agent 3 - controled",
+      "options": {},
+      "schedule": "every_10s"
+    }
+  ],
+  "wallet_links": [
+    {
+      "source": 0,
+      "target": 0
+    }
+  ],
+  "event_links": [
+    {
+      "source": 0,
+      "target": 1
+    },
+    {
+      "source": 0,
+      "target": 2
+    }
+  ],
+  "control_links": [
+    {
+      "source": 1,
+      "target": 3
+    },
+    {
+      "source": 2,
+      "target": 3
+    }
+  ]
+}
