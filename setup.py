@@ -49,7 +49,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/Siko91/pipecash',
+    url='https://github.com/Pipe-Cash/pipecash',
     version='0.1.0',
     zip_safe=False,
 )

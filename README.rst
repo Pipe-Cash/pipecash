@@ -6,16 +6,16 @@ pipecash
 .. image:: https://img.shields.io/pypi/v/pipecash.svg
         :target: https://pypi.python.org/pypi/pipecash
 
-.. image:: https://img.shields.io/travis/Siko91/pipecash.svg
-        :target: https://travis-ci.org/Siko91/pipecash
+.. image:: https://img.shields.io/travis/Pipe-Cash/pipecash.svg
+        :target: https://travis-ci.org/Pipe-Cash/pipecash
 
 .. image:: https://readthedocs.org/projects/pipecash/badge/?version=latest
         :target: https://pipecash.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/Siko91/pipecash/shield.svg
-     :target: https://pyup.io/repos/github/Siko91/pipecash/
+.. image:: https://pyup.io/repos/github/Pipe-Cash/pipecash/shield.svg
+     :target: https://pyup.io/repos/github/Pipe-Cash/pipecash/
      :alt: Updates
 
 
