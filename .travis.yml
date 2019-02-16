@@ -8,7 +8,6 @@ python:
 
 os:
   - linux
-  - windows
 
 install: pip install tox-travis
 
