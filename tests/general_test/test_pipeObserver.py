@@ -78,36 +78,45 @@ class ObserverTest(unittest.TestCase):
         setattr(self, varName, val)
 
     def test_observer_listenMultythreading(self):
-        varName = "test_observer_listenMultythreading_result"
-        errorName = "test_observer_listenMultythreading_error"
+        variables = {}
 
-        def getMockFunc(i): return lambda a, n, s, o, d: self.__wait_and_set_data(
-            varName + str(i), d, 0.1)
+        def getMockFunc(name):
+            def __listener(_a, _n, _s, _o, data):
+                print("--> Writing Data to " + name + "\n")
+                time.sleep(0.1)
+                variables[name] = data
+            return __listener
 
-        for i in range(10):
-            self.observerInstance.listen(None, "Tt", "Tt", getMockFunc(i))
+        self.observerInstance._Observer__listeners = {}
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v0"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v1"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v2"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v3"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v4"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v5"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v6"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v7"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v8"))
+        self.observerInstance.listen(None, "Tt", "Tt", getMockFunc("v9"))
 
         key = "(None, 'Tt', 'Tt')"
         self.assertEqual(len(self.observerInstance._Observer__listeners), 1)
         self.assertTrue(key in self.observerInstance._Observer__listeners)
-        self.assertEqual(
-            len(self.observerInstance._Observer__listeners[key]), 10)
+        self.assertEqual(len(self.observerInstance._Observer__listeners[key]), 10)
 
-        self.observerInstance.listen("Observer", "Callback", "Error",
-                                     lambda a, n, s, o, d: self.__wait_and_set_data(errorName, d, 0))
+        with logMock:
+            data = 42
+            self.observerInstance.trigger("Tt", "Tt", "Tt", self, data)
+            self.observerInstance.trigger("Tt", "Tt", "Tt", self, data)
+            time.sleep(0.2)
 
-        data = 42
-        self.observerInstance.trigger("Tt", "Tt", "Tt", self, data)
+        self.assertEqual(logMock.logs, [])
 
-        time.sleep(0.2)
+        names = ['v' + str(i) for i in range(10)]
 
-        with self.assertRaises(AttributeError):
-            error = getattr(self, errorName)
-            self.assertIsNone(error)
-
-        values = [getattr(self, varName + str(i)) for i in range(10)]
-
-        self.assertEqual(values, [data]*10)
+        self.assertEqual(len(variables), 10, "Variables: " + str(variables))
+        self.assertListEqual(sorted(variables.keys()), names)
+        self.assertEqual(list(variables.values()), [data]*10)
 
     def test_observer_callbackFail(self):
 
