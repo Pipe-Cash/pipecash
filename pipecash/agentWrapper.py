@@ -25,7 +25,6 @@ class AgentWrapper:
         self.walletWrapper = None
         self.options = {}
         self.propagate_origin_event = False
-        self.origin_event = {}
         self.configuration = _configuration
         self.agent = _agent
 
@@ -47,7 +46,7 @@ class AgentWrapper:
 
     @obs.observedMethod
     def start(self):
-        self.agent.start(logWrapper.agentLoggerInstance, self.__createEvent)
+        self.agent.start(logWrapper.agentLoggerInstance)
 
     @obs.observedMethod
     def setWallet(self, _walletWrapper):
@@ -87,11 +86,17 @@ class AgentWrapper:
 
         if hasattr(self, "extend_event") and self.extend_event is not None:
             eventDict = self.__mergeDictionaries(self.extend_event, eventDict)
-        if self.propagate_origin_event is True:
-            eventDict = self.__mergeDictionaries(self.origin_event, eventDict)
 
         pipeObserver.observerInstance.trigger(
             self.name, "Event", self.__id, self, eventDict)
+
+    def __getEventCreator(self, currentEvent=None):
+        if self.propagate_origin_event is not True:
+            return self.__createEvent
+        elif currentEvent is None:
+            return self.__createEvent
+        else:
+            return lambda newEvent: self.__createEvent(self.__mergeDictionaries(currentEvent, newEvent))
 
     def __receiveEvent(self, area, name, state, sender, eventData):
         if not self.__checkCondition("receive_condition"):
@@ -99,8 +104,8 @@ class AgentWrapper:
 
         logWrapper.loggerInstance.info(
             "Running [Receive] on " + self.agent.__class__.__name__)
-        self.__runAction(lambda: self.agent.receive(
-            eventData), "Receive_Event", True, eventData)
+        create_event = self.__getEventCreator(eventData)
+        self.__runAction(lambda: self.agent.receive(eventData, create_event), "Receive_Event", True, eventData)
 
     def __receiveControlEvent(self, area, name, state, sender, eventData):
         if not self.__checkCondition("control_condition"):
@@ -108,14 +113,14 @@ class AgentWrapper:
 
         logWrapper.loggerInstance.info(
             "Running [Check] on " + self.agent.__class__.__name__)
-        self.__runAction(lambda: self.agent.check(),
-                         "Control_Check", True, eventData)
+        create_event = self.__getEventCreator(eventData)
+        self.__runAction(lambda: self.agent.check(create_event), "Control_Check", True, eventData)
 
     def __runCheck(self, *args):
         logWrapper.loggerInstance.info(
             "Running [Check] on " + self.agent.__class__.__name__)
-        self.__runAction(lambda: self.agent.check(),
-                         "Scheduled_Check", False, {})
+        create_event = self.__getEventCreator(None)
+        self.__runAction(lambda: self.agent.check(create_event), "Scheduled_Check", False, {})
 
     def __runAction(self, action, actionName, solveOptions=False, eventData={}):
         self.__lock.acquire()
@@ -126,16 +131,12 @@ class AgentWrapper:
                 originalOptions, eventData)
             self.agent.options = solvedOptions
 
-        if self.propagate_origin_event is True:
-            self.origin_event = eventData
-
         try:
             action()
         except Exception as ex:
             pipeObserver.observerInstance.trigger(
                 self.type, actionName, "Error", self, ex)
         finally:
-            self.origin_event = {}
             self.agent.options = originalOptions
             self.__lock.release()
 

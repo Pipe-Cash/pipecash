@@ -26,7 +26,7 @@ class AgentControlTest(unittest.TestCase):
         targetWrap.start()
 
         with logMock:
-            sender.check()
+            senderWrap._AgentWrapper__runCheck()
             time.sleep(0.005)
 
         expectedSenderMethods = [

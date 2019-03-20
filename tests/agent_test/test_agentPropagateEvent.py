@@ -52,7 +52,7 @@ class AgentPropagateTest(unittest.TestCase):
         targetWrap.start()
 
         with logMock:
-            sender1.check()
+            senderWrap1._AgentWrapper__runCheck()
             time.sleep(0.005)
 
         expectedSender1Methods = [

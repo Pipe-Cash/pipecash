@@ -2,10 +2,9 @@
 
 class TestAgent:
 
-    def start(self, log, create_event):
+    def start(self, log):
         self.calledMethods.append(self.start.__name__)
         self.log = log
-        self.create_event = create_event
         pass
 
     def __init__(self):
@@ -24,10 +23,10 @@ class TestAgent:
     def validate_options(self):
         self.calledMethods.append(self.validate_options.__name__)
 
-    def check(self):
+    def check(self, create_event):
         self.calledMethods.append(self.check.__name__)
 
-    def receive(self, event):
+    def receive(self, event, create_event):
         self.events.append(str(event))
         self.calledMethods.append(self.receive.__name__)
 

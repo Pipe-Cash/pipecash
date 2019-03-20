@@ -23,8 +23,9 @@ class AgentThreadingTest(unittest.TestCase):
         def run100ChecksLambda(): return do100times(
             lambda: wrapper._AgentWrapper__runCheck())
 
-        def run100ReceivesLambda(): return do100times(lambda: wrapper._AgentWrapper__receiveEvent(
-            "area", "name", "state", self, {}))
+        def run100ReceivesLambda(): return do100times(
+            lambda: wrapper._AgentWrapper__receiveEvent(
+                "area", "name", "state", self, {}))
 
         threads = []
         for i in range(5):
