@@ -23,7 +23,7 @@ def TestAgentFactory(membersToInclude):
         "options": {},
         "wallet": mocks.TestWallet(),
         "description": "A few words about the agent",
-        "event_description": "{}",
+        "event_description": {},
         "default_options": {},
         "default_schedule": "every_1s",
         "uses_wallet": False,

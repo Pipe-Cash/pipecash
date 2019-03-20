@@ -15,7 +15,7 @@ class TestAgent:
         self.options = {}
         self.wallet = None
         self.description = ""
-        self.event_description = ""
+        self.event_description = {}
         self.default_options = {'foo': "default_value"}
         self.uses_wallet = True
         self.uses_secret_variables = []

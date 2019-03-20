@@ -75,7 +75,7 @@ class EventCreator_MockAgent(MockAgent):
         self.default_options = {
             "event": {"data": 42}
         }
-        self.event_description = "The event will be the object from options['event']"
+        self.event_description = { "data": 42 }
 
     def check(self):
         self.create_event(self.options["event"])
