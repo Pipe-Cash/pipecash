@@ -40,13 +40,13 @@ class ThreadingTest_MockAgent(MockAgent):
         c = self.counter
         time.sleep(0.001)
         self.counter = c + 1
-        return MockAgent.check(self)
+        return MockAgent.check(self, create_event)
 
     def receive(self, event, create_event):
         c = self.counter
         time.sleep(0.002)
         self.counter = c + 1
-        return MockAgent.receive(self, event)
+        return MockAgent.receive(self, event, create_event)
 
 
 class EventReceiver_MockAgent(MockAgent):
@@ -60,11 +60,11 @@ class EventReceiver_MockAgent(MockAgent):
 
     def check(self, create_event):
         self.receivedData.append(self.options["eventData"])
-        return MockAgent.check(self)
+        return MockAgent.check(self, create_event)
 
     def receive(self, event, create_event):
         self.receivedData.append(self.options["eventData"])
-        return MockAgent.receive(self, event)
+        return MockAgent.receive(self, event, create_event)
 
 
 class EventCreator_MockAgent(MockAgent):
@@ -78,8 +78,8 @@ class EventCreator_MockAgent(MockAgent):
 
     def check(self, create_event):
         create_event(self.options["event"])
-        return MockAgent.check(self)
+        return MockAgent.check(self, create_event)
 
     def receive(self, event, create_event):
         create_event(self.options["event"])
-        return MockAgent.receive(self, event)
+        return MockAgent.receive(self, event, create_event)

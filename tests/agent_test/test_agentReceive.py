@@ -41,5 +41,6 @@ class AgentReceiveTest(unittest.TestCase):
         self.assertListEqual(target.calledMethods, expectedTargetMethods,
                              "Checking called methods of target...")
         self.assertListEqual(target.receivedData, ["42"])
-        self.assertListEqual(logMock.logs,
-                             ["Running [Receive] on EventReceiver_MockAgent"])
+        self.assertListEqual(logMock.logs, [
+            "Running [Check] on EventCreator_MockAgent",
+            "Running [Receive] on EventReceiver_MockAgent" ])
