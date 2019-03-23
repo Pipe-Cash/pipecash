@@ -19,7 +19,7 @@ logLevelChoiceType = click.Choice(logLevels, case_sensitive=True)
 
 
 @click.command()
-@click.version_option("0.1.0")
+@click.version_option("0.1.0.1")
 @click.option('-s', '--scenarioPath', type=pathType, required=True, help='Path to the scenario JSON file.')
 @click.option('--secretsPath', type=pathType, help='Path to the screts JSON file.')
 @click.option('--logLevel', default="DEBUG", type=logLevelChoiceType, help="log level for the main log")

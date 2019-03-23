@@ -4,7 +4,7 @@
 
 __author__ = """Aleksandar Nikolaev Dinkov"""
 __email__ = 'alexander.n.dinkov@gmail.com'
-__version__ = '0.1.0'
+__version__ = '0.1.0.1'
 
 from pipecash import agentWrapper
 from pipecash import cli
