@@ -22,6 +22,9 @@ If you are reporting a bug, please include:
 * Your operating system name and version.
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
+* Give a Pastebin link to your scenario file
+* **DO NOT** publish your 'secrets.json' file. It is supposed to stay secret.
+
 
 Fix Bugs
 ~~~~~~~~
