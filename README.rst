@@ -48,3 +48,7 @@ This package contains the core functionality of PipeCash, needed to run any Pipe
 The package does not contain any PipeCash agents or wallets. They must come from separate packages.
 It does not contain any configurations either.
 At this stage users will be required to create their own configurations.
+
+Issues
+------
+To tell us about a bug, please see the issue template : https://github.com/Pipe-Cash/pipecash/issues/21
