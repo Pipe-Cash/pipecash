@@ -15,11 +15,13 @@ class ScenarioTest(unittest.TestCase):
         pipeObserver.observerInstance = pipeObserver.Observer()
 
     def test_loadScenario(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
     def test_loadScenario_checkNames(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
         agentNames = [
@@ -34,7 +36,8 @@ class ScenarioTest(unittest.TestCase):
         self.assertListEqual([i.name for i in scenario.wallets], walletNames)
 
     def test_loadScenario_walletsOnlyWhereConfigured(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
         wallets = [scenario.wallets[0].wallet, None, None, None]
@@ -45,7 +48,8 @@ class ScenarioTest(unittest.TestCase):
             [i.walletWrapper for i in scenario.agents], walletWraps)
 
     def test_loadScenario_calledMethods(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
         calledAgentMethods = [
@@ -66,7 +70,8 @@ class ScenarioTest(unittest.TestCase):
                 scenario.wallets[i].wallet.calledMethods, calledWalletMethods[i])
 
     def test_loadScenario_options(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
         agentOptions = [{"foo": "bar"}, {"foo": "bar"},
@@ -79,7 +84,8 @@ class ScenarioTest(unittest.TestCase):
             [i.wallet.options for i in scenario.wallets], walletOptions)
 
     def test_loadScenario_schedule(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
         scheduledTasks = pipeScheduler.schedulerInstance._Scheduler__scheduledTasks
@@ -93,7 +99,8 @@ class ScenarioTest(unittest.TestCase):
                               for k in keysWithTasks], [1, 1, 1, 1])
 
     def test_loadScenario_eventsAndControl(self):
-        scenario = Scenario(self.scenarioPath, {})
+        scenario = Scenario(self.scenarioPath)
+        scenario.prepareToStart({})
         scenario.start()
 
         id0 = scenario.agents[0]._AgentWrapper__id

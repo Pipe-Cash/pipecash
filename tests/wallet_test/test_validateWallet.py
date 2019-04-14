@@ -224,7 +224,7 @@ class WalletValidationTest(unittest.TestCase):
         ex, tb = self.__shouldFailValidation(members, config, secrets)
 
         self.assertEqual(str(ex),
-                         "[Errno Agent 'Wallet Name' has missing dependencies: ] ErrMsg")
+                         "Agent 'Wallet Name' has missing dependencies: ErrMsg")
 
     def test_walletWrapper_validation_withEnv(self):
         members = {"start": None,
