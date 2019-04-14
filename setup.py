@@ -47,6 +47,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Pipe-Cash/pipecash',
-    version='0.1.0.1',
+    version='0.1.0.2',
     zip_safe=False,
 )
