@@ -22,11 +22,16 @@ logLevelChoiceType = click.Choice(logLevels, case_sensitive=True)
 @click.version_option("0.1.0.1")
 @click.option('-s', '--scenarioPath', type=pathType, required=True, help='Path to the scenario JSON file.')
 @click.option('--secretsPath', type=pathType, help='Path to the screts JSON file.')
+@click.option('--createSecretsFile', is_flag=True, help="create (or print) a secrets file with blank fields and exit.")
 @click.option('--logLevel', default="DEBUG", type=logLevelChoiceType, help="log level for the main log")
 @click.option('--agentLogLevel', default="DEBUG", type=logLevelChoiceType, help="log level for the agent log")
 @click.option('--walletLogLevel', default="DEBUG", type=logLevelChoiceType, help="log level for the wallet log")
-def main(scenariopath, secretspath, loglevel, agentloglevel, walletloglevel):
-    """Console script for pipecash."""
+def main(scenariopath, secretspath, createsecretsfile, loglevel, agentloglevel, walletloglevel):
+    """PipeCash is an automation framework. Learn more at http://pipe.cash/"""
+
+    if(createsecretsfile):
+        runner.createSecretsFile(scenariopath,secretspath)
+        return
 
     runner.Run(scenariopath, secretspath,
                  logLevelValues[logLevels.index(loglevel)],

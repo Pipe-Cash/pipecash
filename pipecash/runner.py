@@ -8,6 +8,7 @@ from pipecash import logWrapper
 from pipecash import pipeScheduler
 
 import time
+import json
 
 def Run(scenariopath, secretspath, loglevel=1, agentloglevel=1, walletloglevel=1):
 
@@ -26,9 +27,22 @@ def Run(scenariopath, secretspath, loglevel=1, agentloglevel=1, walletloglevel=1
 
     logWrapper.loggerInstance.info("Starting PipeCash...")
 
-    sc = scenario.Scenario(scenariopath, secrets)
+    sc = scenario.Scenario(scenariopath)
+    sc.prepareToStart(secrets)
     sc.start()
 
     pipeScheduler.schedulerInstance.start()
     while(True):
         time.sleep(1)
+
+def createSecretsFile(scenariopath, secretspath):
+    sc = scenario.Scenario(scenariopath)
+    namesOfSecrets = sc.getNeededSecrets()
+    secretsDict = dict(zip(namesOfSecrets, [ "" ] * len(namesOfSecrets)))
+    secretsJson = json.dumps(secretsDict, indent=2)
+
+    if secretspath == None:
+        print(secretsJson)
+    else:
+        with open(secretspath, "w") as writeFile:
+            writeFile.write(secretsJson)

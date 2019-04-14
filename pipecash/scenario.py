@@ -14,9 +14,7 @@ from pipecash.observedMethod import observedMethodInstance as obs
 class Scenario():
 
     @obs.observedMethod
-    def __init__(self, path, secrets):
-        self.secrets = secrets
-
+    def __init__(self, path):
         with open(path, "r") as read_file:
             scenarioJson = json.load(read_file)
         self.name = scenarioJson["name"]
@@ -26,16 +24,19 @@ class Scenario():
         for i in ["wallets", "agents", "wallet_links", "event_links", "control_links"]:
             validate.dictMember(scenarioJson, i, list)
 
-        walletsJson = scenarioJson["wallets"]
-        agentsJson = scenarioJson["agents"]
-        wallet_links = scenarioJson["wallet_links"]
-        event_links = scenarioJson["event_links"]
-        control_links = scenarioJson["control_links"]
+        self.walletsJson = scenarioJson["wallets"]
+        self.agentsJson = scenarioJson["agents"]
+        self.wallet_links = scenarioJson["wallet_links"]
+        self.event_links = scenarioJson["event_links"]
+        self.control_links = scenarioJson["control_links"]
 
-        self.wallets = [self.__parseWallet(w) for w in walletsJson]
-        self.agents = [self.__parseAgent(a) for a in agentsJson]
+    def prepareToStart(self, secrets):
+        self.secrets = secrets
 
-        for wLink in wallet_links:
+        self.wallets = [walletWrapper.WalletWrapper(self.__parseWallet(w), w, secrets) for w in self.walletsJson]
+        self.agents = [agentWrapper.AgentWrapper(self.__parseAgent(a), a, secrets) for a in self.agentsJson]
+
+        for wLink in self.wallet_links:
             validate.objectType(wLink, dict, "Wallet Link")
             validate.dictMember(wLink, "source", int)
             validate.dictMember(wLink, "target", int)
@@ -43,7 +44,7 @@ class Scenario():
             a = self.agents[wLink["target"]]
             a.setWallet(w)
 
-        for eLink in event_links:
+        for eLink in self.event_links:
             validate.objectType(eLink, dict, "Event Link")
             validate.dictMember(eLink, "source", int)
             validate.dictMember(eLink, "target", int)
@@ -51,13 +52,27 @@ class Scenario():
             receiver = self.agents[eLink["target"]]
             receiver.receiveEventsFrom(source)
 
-        for cLink in control_links:
+        for cLink in self.control_links:
             validate.objectType(cLink, dict, "Control Link")
             validate.dictMember(cLink, "source", int)
             validate.dictMember(cLink, "target", int)
             source = self.agents[cLink["source"]]
             receiver = self.agents[cLink["target"]]
             receiver.setControllerAgent(source)
+        
+    @obs.observedMethod
+    def getNeededSecrets(self):
+
+        wallets = [self.__parseWallet(w) for w in self.walletsJson]
+        agents = [self.__parseAgent(a) for a in self.agentsJson]
+
+        namesOfSecrets = []
+        for i in wallets + agents:
+            if hasattr(i, "uses_secret_variables"):
+                namesOfSecrets = namesOfSecrets + i.uses_secret_variables
+
+        namesOfSecrets = list(set(namesOfSecrets)) # unique names only
+        return namesOfSecrets
 
     @obs.observedMethod
     def start(self):
@@ -73,7 +88,7 @@ class Scenario():
             walletJson["module"], walletJson["type"])
         walletObject = walletType()
 
-        return walletWrapper.WalletWrapper(walletObject, walletJson, self.secrets)
+        return walletObject
 
     def __parseAgent(self, agentJson):
         validate.dictMember(agentJson, "module", str)
@@ -82,7 +97,7 @@ class Scenario():
             agentJson["module"], agentJson["type"])
         agentObject = agentType()
 
-        return agentWrapper.AgentWrapper(agentObject, agentJson, self.secrets)
+        return agentObject
 
     @obs.observedMethod
     def importClass(self, moduleToImport, classToImport):
@@ -91,5 +106,6 @@ class Scenario():
         for cl in classes:
             if cl[0] == classToImport:
                 return cl[1]
-        raise ModuleNotFoundError("Module %s doesn't contain class %s" % (
+
+        raise Exception("Module %s doesn't contain class %s" % (
             moduleToImport, classToImport))
