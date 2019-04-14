@@ -72,7 +72,7 @@ class WalletWrapper:
                 self.wallet.check_dependencies_missing()
             except Exception as ex:
                 raise EnvironmentError(
-                    "Agent '%s' has missing dependencies: " % self.name, ex)
+                    "Agent '%s' has missing dependencies: %s" % (self.name, ex))
 
     def __mergeDictionaries(self, dict1, dict2):
         result = dict1.copy()   # start with dict1's keys and values

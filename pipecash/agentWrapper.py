@@ -273,7 +273,7 @@ class AgentWrapper:
                 self.agent.check_dependencies_missing()
             except Exception as ex:
                 raise EnvironmentError(
-                    "Agent '%s' has missing dependencies: " % self.name + str(ex))
+                    "Agent '%s' has missing dependencies: %s" % (self.name, str(ex)))
 
     def __mergeDictionaries(self, dict1, dict2):
         result = dict1.copy()   # start with dict1's keys and values
