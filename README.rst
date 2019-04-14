@@ -1,5 +1,5 @@
 ========
-pipecash
+PIPECASH
 ========
 
 
@@ -31,10 +31,13 @@ Description
 ------------
 
 PipeCash is a framework for automation of Bitcoin Related tasks.
+
 It reads a configuration (json file) and executes the appropriate tasks (called "agents") at the appropriate times, in a way similar to IFTTT.
+
 An agent may be scheduled (to run at specific times), controlled (to run when another agent tells it to), receive event data (when another agent produces an event), or just be started once and run in the background.
 
-Agents represent simple actions.
+Agents represent simple actions:
+
 * Sending an email
 * Reading a file
 * Getting specific data from the internet
@@ -45,9 +48,33 @@ Such an agent should work the same, even if it uses a different wallet, or even 
 
 
 This package contains the core functionality of PipeCash, needed to run any PipeCash instance.
+
 The package does not contain any PipeCash agents or wallets. They must come from separate packages.
+
 It does not contain any configurations either.
 At this stage users will be required to create their own configurations.
+
+Quick Start
+------------
+
+Run a scenario:
+
+.. code-block:: bash
+
+   pipecash -s /path/to/scenario.json
+
+If the scenario needs secret variables, generate them:
+
+.. code-block:: bash
+
+   pipecash -s /path/to/scenario.json --createSecretsFile > secrets.json
+
+Once the file is generated, open it and fill the secret variables.
+To run the scenario together with the secrets, use:
+
+.. code-block:: bash
+
+   pipecash -s /path/to/scenario.json --secretsPath /path/to/secrets.json
 
 Issues
 ------
