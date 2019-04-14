@@ -205,8 +205,8 @@ class AgentWrapper:
             try:
                 self.agent.validate_options()
             except Exception as ex:
-                raise Exception("validate_options of %s failed : " %
-                                self.type + str(ex))
+                raise Exception("validate_options of %s failed : %s" %
+                                (self.type, str(ex)))
 
     def __initSchedule(self):
         if hasattr(self.agent, "default_schedule") or "schedule" in self.configuration:
