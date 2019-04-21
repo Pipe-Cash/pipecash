@@ -19,7 +19,7 @@ logLevelChoiceType = click.Choice(logLevels, case_sensitive=True)
 
 
 @click.command()
-@click.version_option("0.1.0.2")
+@click.version_option("0.1.0.3")
 @click.option('-s', '--scenarioPath', type=pathType, required=True, help='Path to the scenario JSON file.')
 @click.option('--secretsPath', type=pathType, help='Path to the screts JSON file.')
 @click.option('--createSecretsFile', is_flag=True, help="create (or print) a secrets file with blank fields and exit.")
