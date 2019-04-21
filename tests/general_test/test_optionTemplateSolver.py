@@ -34,20 +34,20 @@ class OptionTemplateSolverTest(unittest.TestCase):
         self.__solving_A_shouldProduce_B(True, True)
 
     def test_VariableA_shouldProduce_ValueOfA(self):
-        self.__solving_A_shouldProduce_B('{{a}}', '10')
+        self.__solving_A_shouldProduce_B('{{a}}', 10)
 
     def test_StrOnVarA_shouldProduce_StrA(self):
         self.__solving_A_shouldProduce_B('{{str(a)}}', '10')
 
     def test_APlusB_shouldProduce_Sum(self):
-        self.__solving_A_shouldProduce_B('{{a+b}}', '15')
+        self.__solving_A_shouldProduce_B('{{a+b}}', 15)
 
-    def test_VariableInText_shouldProduce_TextWithVal(self):
+    def test_VariableInText_shouldProduce_SameText(self):
         self.__solving_A_shouldProduce_B(
-            'in the {{a}} middle', 'in the 10 middle')
+            'in the {{a}} middle', 'in the {{a}} middle')
 
-    def test_VariableInWord_shouldProduce_TextWithVal(self):
-        self.__solving_A_shouldProduce_B('also mi{{a}}ddle', 'also mi10ddle')
+    def test_VariableInWord_shouldProduce_SameText(self):
+        self.__solving_A_shouldProduce_B('also mi{{a}}ddle', 'also mi{{a}}ddle')
 
     def test_StrOnAPlusS_shouldProduce_10s(self):
         self.__solving_A_shouldProduce_B('{{str(a)+s}}', '10s')
@@ -63,20 +63,13 @@ class OptionTemplateSolverTest(unittest.TestCase):
 
     def test_RangeB_shouldProduce_ZeroToFour(self):
         self.__solving_A_shouldProduce_B(
-            '{{list(range(b))}}', '[0, 1, 2, 3, 4]')
+            '{{list(range(b))}}', [0, 1, 2, 3, 4])
 
     def test_LenOfStr_shouldProduce_2(self):
-        self.__solving_A_shouldProduce_B('{{len(s+s)}}', '2')
+        self.__solving_A_shouldProduce_B('{{len(s+s)}}', 2)
 
     def test_StringConstantsCombined_shouldProduce_ABC(self):
         self.__solving_A_shouldProduce_B("{{'ab' + 'c'}}", 'abc')
-
-    def test_TwoTagsNextToEachOther_shouldProduce_BothValuesConverted(self):
-        self.__solving_A_shouldProduce_B("{{1}}{{a}}", '110')
-
-    def test_TwoTagsFarFromEachOther_shouldProduce_BothValuesConverted(self):
-        self.__solving_A_shouldProduce_B(
-            "Test {{1}} this {{a}}!", 'Test 1 this 10!')
 
     def __solving_A_shouldProduce_B(self, a, b):
         results = templateSolverInstance.solveOptions(
@@ -87,15 +80,22 @@ class OptionTemplateSolverTest(unittest.TestCase):
         self.assertEqual(resultData, b, assertMessage)
 
     def test_solving_UndefinedVariable_shlouldLogException(self):
-        self.__solving_A_shlouldLogException_B("{{c}}")
+        self.__solving_A_shlouldLogException("{{c}}")
 
     def test_solving_DevisionByTwo_shlouldLogException(self):
-        self.__solving_A_shlouldLogException_B("{{1/0}}")
+        self.__solving_A_shlouldLogException("{{1/0}}")
 
     def test_solving_SumStringAndInt_shlouldLogException(self):
-        self.__solving_A_shlouldLogException_B("{{s+a}}")
+        self.__solving_A_shlouldLogException("{{s+a}}")
 
-    def __solving_A_shlouldLogException_B(self, expression):
+    def test_TwoTagsNextToEachOther_shlouldLogException(self):
+        self.__solving_A_shlouldLogException("{{1}}{{2}}")
+
+    def test_TwoTagsFarFromEachOther_shlouldLogException(self):
+        self.__solving_A_shlouldLogException("{{1}} Same Text {{a}}")
+
+
+    def __solving_A_shlouldLogException(self, expression):
         msgStart = "Failed to evaluate expression"
         msgExMarker = "Exception: "
 
@@ -104,15 +104,20 @@ class OptionTemplateSolverTest(unittest.TestCase):
                 {"data": expression}, self.variables)
             resultData = results["data"]
 
-        self.assertEqual(resultData, expression,
-                         "when the evaluation fails the field should stay the same")
 
-        self.assertEqual(len(logMock.logs), 1,
-                         "Expected exactly 1 warning message")
-        self.assertTrue(logMock.logs[0].index(msgStart) >= 0,
-                        "Message was not as expected:\nExpected:%s\nto contain:%s" % (
-            logMock.logs[0], msgStart
-        ))
+        self.assertEqual(len(logMock.logs), 1, "Expected exactly 1 warning message")
+
+        expected = "".join([
+            msgStart,
+            " '", 
+            expression[2:-2], 
+            "'\n\twith data ", 
+            str(self.variables), 
+            "\n\tException: '",
+            resultData,
+            "'"
+        ])
+        self.assertEqual(logMock.logs[0], expected, "Message was not as expected.")
 
         exceptionIndex = logMock.logs[0].index(msgExMarker)+len(msgExMarker)
         exceptionMsg = logMock.logs[0][exceptionIndex:]

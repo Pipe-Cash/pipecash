@@ -71,7 +71,7 @@ class AgentPropagateTest(unittest.TestCase):
                              "Checking called methods of sender2...")
         self.assertListEqual(target.calledMethods, expectedTargetMethods,
                              "Checking called methods of target...")
-        self.assertListEqual(target.receivedData, ["3.14"])
+        self.assertListEqual(target.receivedData, [3.14])
         self.assertListEqual(logMock.logs, [
             "Running [Check] on EventCreator_MockAgent",
             "Running [Receive] on EventCreator_MockAgent",

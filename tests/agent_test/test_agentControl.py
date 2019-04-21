@@ -40,7 +40,7 @@ class AgentControlTest(unittest.TestCase):
                              "Checking called methods of sender...")
         self.assertListEqual(target.calledMethods, expectedTargetMethods,
                              "Checking called methods of target...")
-        self.assertListEqual(target.receivedData, ["42"])
+        self.assertListEqual(target.receivedData, [42])
         self.assertListEqual(logMock.logs,
                              ["Running [Check] on EventCreator_MockAgent",
                              "Running [Check] on EventReceiver_MockAgent"])
