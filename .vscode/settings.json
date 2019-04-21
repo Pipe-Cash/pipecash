@@ -13,6 +13,6 @@
     "python.linting.pylintEnabled": false,
 
 
-    "python.pythonPath": "python",
+    "python.pythonPath": "python3",
     "restructuredtext.confPath": "${workspaceFolder}/docs",
 }
