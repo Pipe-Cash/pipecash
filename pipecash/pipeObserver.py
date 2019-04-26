@@ -60,7 +60,7 @@ class Observer:
             logWrapper.loggerInstance.error(
                 "ObserverCallbackError - %s\nData: %s \nError: %s" % (
                     repr([area, name, state]), repr(data), ex))
-            logWrapper.loggerInstance.info(traceback.format_exc())
+            logWrapper.loggerInstance.debug(traceback.format_exc())
 
     def __getAllMatchingKeys(self, a, b, c):
         _ = None
