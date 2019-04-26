@@ -82,11 +82,14 @@ class AgentWrapper:
                     self.name, type(eventDict)))
             return
 
-        if not self.__checkCondition("event_condition"):
+        if not self.__checkCondition("event_condition", eventDict):
             return
 
         if hasattr(self, "extend_event") and self.extend_event is not None:
             eventDict = self.__mergeDictionaries(self.extend_event, eventDict)
+
+        logWrapper.loggerInstance.info(self.type + " created event: " + 
+            repr([ '%s: %s' % (i, str(eventDict[i])[:50]) for i in eventDict ]))
 
         pipeObserver.observerInstance.trigger(
             self.name, "Event", self.__id, self, eventDict)
@@ -100,26 +103,26 @@ class AgentWrapper:
             return lambda newEvent: self.__createEvent(self.__mergeDictionaries(currentEvent, newEvent))
 
     def __receiveEvent(self, area, name, state, sender, eventData):
-        if not self.__checkCondition("receive_condition"):
+        if not self.__checkCondition("receive_condition", eventData):
             return
 
         logWrapper.loggerInstance.info(
-            "Running [Receive] on " + self.agent.__class__.__name__)
+            "Running [Receive] on " + self.type)
         create_event = self.__getEventCreator(eventData)
         self.__runAction(lambda: self.agent.receive(eventData, create_event), "Receive_Event", True, eventData)
 
     def __receiveControlEvent(self, area, name, state, sender, eventData):
-        if not self.__checkCondition("control_condition"):
+        if not self.__checkCondition("control_condition", eventData):
             return
 
         logWrapper.loggerInstance.info(
-            "Running [Check] on " + self.agent.__class__.__name__)
+            "Running [Check] on " + self.type)
         create_event = self.__getEventCreator(eventData)
         self.__runAction(lambda: self.agent.check(create_event), "Control_Check", True, eventData)
 
     def __runCheck(self, *args):
         logWrapper.loggerInstance.info(
-            "Running [Check] on " + self.agent.__class__.__name__)
+            "Running [Check] on " + self.type)
         create_event = self.__getEventCreator(None)
         self.__runAction(lambda: self.agent.check(create_event), "Scheduled_Check", True, {})
 
@@ -132,7 +135,7 @@ class AgentWrapper:
                 originalOptions, eventData)
             self.agent.options = solvedOptions
 
-        logWrapper.loggerInstance.debug("Options evaluated to: " + 
+        logWrapper.loggerInstance.info(self.type + " options evaluated to: " + 
             repr([ '%s: %s' % (i, str(self.agent.options[i])[:30]) for i in self.agent.options ]))
 
         try:
@@ -140,13 +143,13 @@ class AgentWrapper:
         except Exception as ex:
             pipeObserver.observerInstance.trigger(
                 self.type, actionName, "Error", self, ex)
-            logWrapper.loggerInstance.debug(ex)
-            logWrapper.loggerInstance.debug(traceback.format_exc())
+            logWrapper.loggerInstance.warn(ex)
+            logWrapper.loggerInstance.warn(traceback.format_exc())
         finally:
             self.agent.options = originalOptions
             self.__lock.release()
 
-    def __checkCondition(self, conditionName):
+    def __checkCondition(self, conditionName, eventData):
         result = False
 
         if not hasattr(self, conditionName):
@@ -156,13 +159,12 @@ class AgentWrapper:
             return True
 
         try:
-            result = condition()
+            result = condition(eventData)
             if result == True:
                 return True
             elif result == False:
                 logWrapper.loggerInstance.debug(
-                    "event_condition on %s retuned False" % (
-                        self.agent.__class__.__name__))
+                    "%s on %s retuned False" % (conditionName, self.type))
                 return False
             else:
                 raise AssertionError("Evaluation result must be True or False")
@@ -242,33 +244,27 @@ class AgentWrapper:
         if "event_condition" in self.configuration:
             validate.dictMember(self.configuration, "event_condition", str)
             self.event_condition = self.__getConditionEvaluatorFunc(
-                self.configuration["event_condition"],
-                _secrets)
+                self.configuration["event_condition"])
         if "receive_condition" in self.configuration:
             validate.objectMember(self.agent, "receive", MethodType)
             validate.dictMember(self.configuration, "receive_condition", str)
             self.receive_condition = self.__getConditionEvaluatorFunc(
-                self.configuration["receive_condition"],
-                _secrets)
+                self.configuration["receive_condition"])
         if "control_condition" in self.configuration:
             validate.objectMember(self.agent, "check", MethodType)
             validate.dictMember(self.configuration, "control_condition", str)
             self.control_condition = self.__getConditionEvaluatorFunc(
-                self.configuration["control_condition"],
-                _secrets)
+                self.configuration["control_condition"])
 
     def __initExtendEvent(self):
         if "extend_event" in self.configuration:
             validate.dictMember(self.configuration, "extend_event", dict)
             self.extend_event = self.configuration["extend_event"]
 
-    def __getConditionEvaluatorFunc(self, condition, secrets):
-        addon = {}
-        if secrets is not None:
-            addon = {"secrets": secrets}
-
-        def solve(globsDict): return bool(optionTemplateSolver.templateSolverInstance.solve(
-            condition, self.__mergeDictionaries(globsDict, addon)))
+    def __getConditionEvaluatorFunc(self, condition):
+        def solve(globsDict): return bool(
+            optionTemplateSolver.templateSolverInstance.solve(
+                condition, globsDict))
         return solve
 
     def __checkDependencies(self):
