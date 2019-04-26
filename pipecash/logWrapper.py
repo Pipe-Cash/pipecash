@@ -19,8 +19,8 @@ def __createLogger(logName):
 
 def observerPrint(area, name, state, sender, data):
     dataMaxLen = 120
-    dataStr = str(data)[:dataMaxLen] + \
-        ("..." if len(data) > dataMaxLen else "")
+    dataStr = str(data)
+    dataStr = dataStr[:dataMaxLen] + ("..." if len(dataStr) > dataMaxLen else "")
     noneStr = "<None>"
     areaStr = noneStr if area is None else str(area)
     nameStr = noneStr if name is None else str(name)
