@@ -1,6 +1,6 @@
 {
-    "python.unitTest.unittestEnabled": true,
-    "python.unitTest.unittestArgs": [
+    "python.testing.unittestEnabled": true,
+    "python.testing.unittestArgs": [
         "-v",
         "-s",
         "tests",
