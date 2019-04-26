@@ -132,8 +132,8 @@ class AgentWrapper:
                 originalOptions, eventData)
             self.agent.options = solvedOptions
 
-        logWrapper.loggerInstance.debug("Options evaluated to: \n\t" + 
-            '\n\t'.join([ '%s: %s' % (i, str(self.agent.options[i])[:100]) for i in self.agent.options ]))
+        logWrapper.loggerInstance.debug("Options evaluated to: " + 
+            repr([ '%s: %s' % (i, str(self.agent.options[i])[:30]) for i in self.agent.options ]))
 
         try:
             action()
