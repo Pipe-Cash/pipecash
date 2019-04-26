@@ -1,6 +1,7 @@
 from __future__ import absolute_import, print_function
 
 import threading
+import traceback
 
 from pipecash import logWrapper
 
@@ -59,6 +60,7 @@ class Observer:
             logWrapper.loggerInstance.error(
                 "ObserverCallbackError - %s\nData: %s \nError: %s" % (
                     repr([area, name, state]), repr(data), ex))
+            logWrapper.loggerInstance.info(traceback.format_exc())
 
     def __getAllMatchingKeys(self, a, b, c):
         _ = None

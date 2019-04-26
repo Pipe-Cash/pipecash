@@ -131,5 +131,6 @@ class ObserverTest(unittest.TestCase):
         expectedError += "\nData: None "
         expectedError += "\nError: Example of a NotImplementedError message"
 
-        self.assertEqual(len(logMock.logs), 1)
+        self.assertEqual(len(logMock.logs), 2)
         self.assertEqual(logMock.logs[0], expectedError)
+        self.assertEqual(logMock.logs[1][:len("Traceback")], "Traceback")
