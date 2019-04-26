@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function
 from types import MethodType
 from uuid import uuid4
 from threading import Lock
+import traceback
 
 from pipecash import validationUtils as validate
 from pipecash import walletWrapper
@@ -120,7 +121,7 @@ class AgentWrapper:
         logWrapper.loggerInstance.info(
             "Running [Check] on " + self.agent.__class__.__name__)
         create_event = self.__getEventCreator(None)
-        self.__runAction(lambda: self.agent.check(create_event), "Scheduled_Check", False, {})
+        self.__runAction(lambda: self.agent.check(create_event), "Scheduled_Check", True, {})
 
     def __runAction(self, action, actionName, solveOptions=False, eventData={}):
         self.__lock.acquire()
@@ -131,11 +132,16 @@ class AgentWrapper:
                 originalOptions, eventData)
             self.agent.options = solvedOptions
 
+        logWrapper.loggerInstance.debug("Options evaluated to: \n\t" + 
+            '\n\t'.join([ '%s: %s' % (i, str(self.agent.options[i])[:100]) for i in self.agent.options ]))
+
         try:
             action()
         except Exception as ex:
             pipeObserver.observerInstance.trigger(
                 self.type, actionName, "Error", self, ex)
+            logWrapper.loggerInstance.debug(ex)
+            logWrapper.loggerInstance.debug(traceback.format_exc())
         finally:
             self.agent.options = originalOptions
             self.__lock.release()
