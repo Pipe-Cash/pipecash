@@ -160,11 +160,11 @@ class AgentWrapper:
 
         try:
             result = condition(eventData)
+            logWrapper.loggerInstance.debug(
+                "%s on %s retuned %s" % (conditionName, self.type, str(result)))
             if result == True:
                 return True
             elif result == False:
-                logWrapper.loggerInstance.debug(
-                    "%s on %s retuned False" % (conditionName, self.type))
                 return False
             else:
                 raise AssertionError("Evaluation result must be True or False")
