@@ -73,9 +73,14 @@ class AgentPropagateTest(unittest.TestCase):
                              "Checking called methods of target...")
         self.assertListEqual(target.receivedData, [3.14])
         self.assertListEqual(logMock.logs, [
-            "Running [Check] on EventCreator_MockAgent",
-            "Running [Receive] on EventCreator_MockAgent",
-            "Running [Receive] on EventReceiver_MockAgent"
+            'Running [Check] on EventCreator_MockAgent',
+            'EventCreator_MockAgent options evaluated to: [\'name: sender1\', "event: {\'data\': 3.14}"]',
+            "EventCreator_MockAgent created event: ['data: 3.14']",
+            'Running [Receive] on EventCreator_MockAgent',
+            'EventCreator_MockAgent options evaluated to: [\'name: sender2\', "event: {\'extraData\': 42}"]',
+            "EventCreator_MockAgent created event: ['data: 3.14', 'extraData: 42']",
+            'Running [Receive] on EventReceiver_MockAgent',
+            "EventReceiver_MockAgent options evaluated to: ['name: target', 'eventData: 3.14']"
         ])
         self.assertEqual(sender2.events, [str({'data': 3.14})])
         self.assertEqual(target.events, [str({'data': 3.14, 'extraData': 42})])
