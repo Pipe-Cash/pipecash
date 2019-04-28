@@ -72,15 +72,22 @@ class AgentPropagateTest(unittest.TestCase):
         self.assertListEqual(target.calledMethods, expectedTargetMethods,
                              "Checking called methods of target...")
         self.assertListEqual(target.receivedData, [3.14])
-        self.assertListEqual(logMock.logs, [
+
+        expectedLogs = [
             'Running [Check] on EventCreator_MockAgent',
-            'EventCreator_MockAgent options evaluated to: [\'name: sender1\', "event: {\'data\': 3.14}"]',
-            "EventCreator_MockAgent created event: ['data: 3.14']",
+            'EventCreator_MockAgent options evaluated to: ' + repr({'name': 'sender1', 'event': "{'data': 3.14}"}),
+            "EventCreator_MockAgent created event: " + repr({'data': '3.14'}),
             'Running [Receive] on EventCreator_MockAgent',
-            'EventCreator_MockAgent options evaluated to: [\'name: sender2\', "event: {\'extraData\': 42}"]',
-            "EventCreator_MockAgent created event: ['data: 3.14', 'extraData: 42']",
+            'EventCreator_MockAgent options evaluated to: '+ repr({'name': 'sender2', 'event': "{'extraData': 42}"}),
+            "EventCreator_MockAgent created event: " + repr({'data': '3.14', 'extraData': '42'}),
             'Running [Receive] on EventReceiver_MockAgent',
-            "EventReceiver_MockAgent options evaluated to: ['name: target', 'eventData: 3.14']"
-        ])
+            "EventReceiver_MockAgent options evaluated to: " + repr({'name': 'target', 'eventData': '3.14'}),
+        ]
+
+        self.assertEqual(len(logMock.logs), len(expectedLogs))
+
+        for i in range(len(expectedLogs)):
+            self.assertEqual(logMock.logs[i], expectedLogs[i])
+
         self.assertEqual(sender2.events, [str({'data': 3.14})])
         self.assertEqual(target.events, [str({'data': 3.14, 'extraData': 42})])

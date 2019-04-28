@@ -89,7 +89,7 @@ class AgentWrapper:
             eventDict = self.__mergeDictionaries(self.extend_event, eventDict)
 
         logWrapper.loggerInstance.info(self.type + " created event: " + 
-            repr([ '%s: %s' % (i, str(eventDict[i])[:50]) for i in eventDict if i[0] != "_" ]))
+            repr({ i : str(eventDict[i])[:50] for i in eventDict if i[0] != "_" }))
 
         pipeObserver.observerInstance.trigger(
             self.name, "Event", self.__id, self, eventDict)
@@ -136,7 +136,7 @@ class AgentWrapper:
             self.agent.options = solvedOptions
 
         logWrapper.loggerInstance.info(self.type + " options evaluated to: " + 
-            repr([ '%s: %s' % (i, str(self.agent.options[i])[:30]) for i in self.agent.options ]))
+            repr({ i : str(self.agent.options[i])[:50] for i in self.agent.options if i[0] != "_" }))
 
         try:
             action()

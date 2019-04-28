@@ -43,8 +43,8 @@ class AgentReceiveTest(unittest.TestCase):
         self.assertListEqual(target.receivedData, [42])
         self.assertListEqual(logMock.logs, [
             'Running [Check] on EventCreator_MockAgent',
-            'EventCreator_MockAgent options evaluated to: ["event: {\'data\': 42}"]',
-            "EventCreator_MockAgent created event: ['data: 42']",
+            'EventCreator_MockAgent options evaluated to: ' + repr({'event': "{'data': 42}"}),
+            "EventCreator_MockAgent created event: " + repr({'data': '42'}),
             'Running [Receive] on EventReceiver_MockAgent',
-            "EventReceiver_MockAgent options evaluated to: ['eventData: 42']"
+            "EventReceiver_MockAgent options evaluated to: " + repr({'eventData': '42'}),
         ])
