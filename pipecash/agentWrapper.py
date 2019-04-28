@@ -89,7 +89,7 @@ class AgentWrapper:
             eventDict = self.__mergeDictionaries(self.extend_event, eventDict)
 
         logWrapper.loggerInstance.info(self.type + " created event: " + 
-            repr([ '%s: %s' % (i, str(eventDict[i])[:50]) for i in eventDict ]))
+            repr([ '%s: %s' % (i, str(eventDict[i])[:50]) for i in eventDict if i[0] != "_" ]))
 
         pipeObserver.observerInstance.trigger(
             self.name, "Event", self.__id, self, eventDict)
