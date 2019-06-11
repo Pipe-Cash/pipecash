@@ -2,6 +2,12 @@
 PIPECASH
 ========
 
+A framework for easy automation of Bitcoin related tasks. PipeCash is flexible due to it's plugin system and configuration options. Read more at http://pipe.cash/
+
+* License: OPEN BLOCKCHAIN-AND-FIAT-SPECIFIC LICENSE
+* Documentation: https://pipecash.readthedocs.io.
+* Website: https://pipe.cash
+
 
 .. image:: https://img.shields.io/pypi/v/pipecash.svg
         :target: https://pypi.python.org/pypi/pipecash
@@ -17,16 +23,8 @@ PIPECASH
 .. image:: https://pyup.io/repos/github/Pipe-Cash/pipecash/shield.svg
      :target: https://pyup.io/repos/github/Pipe-Cash/pipecash/
      :alt: Updates
-
-
-
-* License: OPEN BLOCKCHAIN-AND-FIAT-SPECIFIC LICENSE
-* Documentation: https://pipecash.readthedocs.io.
-* Website: https://pipe.cash.
-
-
-A framework for easy automation of Bitcoin related tasks. PipeCash is flexible due to it's plugin system and configuration options. Read more at http://pipe.cash/
-
+     
+     
 Description
 ------------
 
