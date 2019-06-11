@@ -20,7 +20,7 @@ PIPECASH
 
 
 
-* License: OPEN BLOCKCHAIN-SPECIFIC LICENSE
+* License: OPEN BLOCKCHAIN-AND-FIAT-SPECIFIC LICENSE
 * Documentation: https://pipecash.readthedocs.io.
 * Website: https://pipe.cash.
 
