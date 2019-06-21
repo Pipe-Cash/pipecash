@@ -43,7 +43,7 @@ class AgentWrapper:
         self.__checkDependencies()
         self.__initEventConfiguration()
         self.__initConditions()
-        self.__initExtendEvent()
+        self.__initTransformEvent()
 
     @obs.observedMethod
     def start(self):
@@ -82,17 +82,15 @@ class AgentWrapper:
                     self.name, type(eventDict)))
             return
 
-        if not self.__checkCondition("event_condition", eventDict):
-            return
-
-        if hasattr(self, "extend_event") and self.extend_event is not None:
-            eventDict = self.__mergeDictionaries(self.extend_event, eventDict)
-
-        logWrapper.loggerInstance.info(self.type + " created event: " + 
-            repr({ i : str(eventDict[i])[:50] for i in eventDict if i[0] != "_" }))
-
-        pipeObserver.observerInstance.trigger(
-            self.name, "Event", self.__id, self, eventDict)
+        eventsToTrigger = self.__getEventsAfterTransformation(eventDict)
+            
+        for eventToTrigger in eventsToTrigger:
+            if not self.__checkCondition("event_condition", eventToTrigger):
+                continue
+            logWrapper.loggerInstance.info(self.type + " created event: " + 
+                repr({ i : str(eventToTrigger[i])[:50] for i in eventToTrigger if i[0] != "_" }))
+            pipeObserver.observerInstance.trigger(
+                self.name, "Event", self.__id, self, eventToTrigger)
 
     def __getEventCreator(self, currentEvent=None):
         if self.propagate_origin_event is not True:
@@ -148,6 +146,25 @@ class AgentWrapper:
         finally:
             self.agent.options = originalOptions
             self.__lock.release()
+
+    def __getEventsAfterTransformation(self, eventData):
+    
+        if not hasattr(self, "transform_event"):
+            return [ eventData ]
+
+        try:
+            eventsToTrigger = self.transform_event(eventData)
+        except Exception as ex:
+            logWrapper.loggerInstance.error("Failed to transform_event with %s. Error: %s" % (
+                self.configuration["transform_event"], str(ex)))
+
+        if type(eventsToTrigger) == dict:
+            return [ eventsToTrigger ]
+        elif type(eventsToTrigger) == list:
+            return eventsToTrigger
+        else:
+            raise AssertionError("Result of transform_event must be a 'dict' or a 'list' of 'dict'. Occured in %s. Transformation : %s" % (
+                self.name, self.configuration["transform_event"] ))
 
     def __checkCondition(self, conditionName, eventData):
         result = False
@@ -256,14 +273,21 @@ class AgentWrapper:
             self.control_condition = self.__getConditionEvaluatorFunc(
                 self.configuration["control_condition"])
 
-    def __initExtendEvent(self):
-        if "extend_event" in self.configuration:
-            validate.dictMember(self.configuration, "extend_event", dict)
-            self.extend_event = self.configuration["extend_event"]
+    def __initTransformEvent(self):
+        if "transform_event" in self.configuration:
+            validate.dictMember(self.configuration, "transform_event", str)
+            self.transform_event = self.__getEventTransformerFunc(
+                self.configuration["transform_event"])
+
+    def __getEventTransformerFunc(self, transformation):
+        def change(globsDict): 
+            return (optionTemplateSolver.templateSolverInstance.solve(
+                transformation, globsDict))
+        return change
 
     def __getConditionEvaluatorFunc(self, condition):
-        def solve(globsDict): return bool(
-            optionTemplateSolver.templateSolverInstance.solve(
+        def solve(globsDict):
+            return bool(optionTemplateSolver.templateSolverInstance.solve(
                 condition, globsDict))
         return solve
 
