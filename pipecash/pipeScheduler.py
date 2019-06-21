@@ -48,7 +48,7 @@ class Scheduler:
             "6pm", "7pm", "8pm", "9pm", "10pm", "11pm",
         ]
 
-        self.__knownSchedules_other = ["never"]
+        self.__knownSchedules_other = ["never", "once"]
 
         self.__knownSchedules_every_s = [self.everyScheduleToSeconds(
             i) for i in self.__knownSchedules_every]
@@ -88,6 +88,13 @@ class Scheduler:
         thread = threading.Thread(target=self.__schedulerLoop)
         thread.setName("SCH")
         thread.start()
+        
+        tasksToRunOnce = self.__scheduledTasks['once']
+        self.__scheduledTasks['once'] = []
+        for i in range(len(tasksToRunOnce)):
+            thread = threading.Thread(target=tasksToRunOnce[i])
+            thread.setName("Once #" + str(i))
+            thread.start()
 
     def __schedulerLoop(self):
         while not self.__stop:

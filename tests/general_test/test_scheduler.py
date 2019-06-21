@@ -150,3 +150,51 @@ class PipeSchedulerTest(unittest.TestCase):
         for i in [1, 2, 3]:
             self.assertEqual(variables[i-1], 5*i,
                              "Variables: " + str(variables))
+
+    def test_scheduler_scheduleOnce(self):
+        varName = "test_scheduler_scheduleOnce_once"
+
+        self.schedulerInstance.registerTask(
+            "once",
+            lambda: setattr(self, varName, 42))
+
+        self.schedulerInstance.start()
+
+        t = utils.waitLoop(
+            "wait for scheduler to set the variable",
+            1, lambda: hasattr(self, varName))
+
+        self.assertEqual(getattr(self, varName), 42)
+        self.assertLess(t, 0.05)
+
+    def test_scheduler_scheduleOnce_isIndeedOnlyOnce(self):
+        varName_once = "test_scheduler_scheduleOnce_once"
+        varName_1s = "test_scheduler_scheduleOnce_1s"
+
+        self.schedulerInstance.registerTask(
+            "once",
+            lambda: setattr( self, varName_once, 
+                (getattr(self, varName_once) + 1) if hasattr(self, varName_once) else 1 )
+            )
+
+        counter = 1
+        self.schedulerInstance.registerTask(
+            "every_1s",
+            lambda: setattr( self, varName_1s,
+                (getattr(self, varName_1s) + 1) if hasattr(self, varName_1s) else 1 )
+            )
+
+        self.schedulerInstance.start()
+
+        t = utils.waitLoop(
+            "wait for scheduler to set the variable once",
+            1, lambda: hasattr(self, varName_once))
+
+        self.assertEqual(getattr(self, varName_once), 1)
+        self.assertLess(t, 0.05)
+        
+        t = utils.waitLoop(
+            "wait for scheduler to set the variable 5 times",
+            4, lambda: hasattr(self, varName_1s) and getattr(self, varName_1s) >= 3)
+
+        self.assertEqual(getattr(self, varName_once), 1)
