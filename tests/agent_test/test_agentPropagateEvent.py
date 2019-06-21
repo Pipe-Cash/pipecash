@@ -73,7 +73,7 @@ class AgentPropagateTest(unittest.TestCase):
                              "Checking called methods of target...")
         self.assertListEqual(target.receivedData, [3.14])
 
-        expectedLogs = [
+        self.assertListEqual(logMock.logs, [
             'Running [Check] on EventCreator_MockAgent',
             'EventCreator_MockAgent options evaluated to: ' + repr({'name': 'sender1', 'event': "{'data': 3.14}"}),
             "EventCreator_MockAgent created event: " + repr({'data': '3.14'}),
@@ -82,12 +82,9 @@ class AgentPropagateTest(unittest.TestCase):
             "EventCreator_MockAgent created event: " + repr({'data': '3.14', 'extraData': '42'}),
             'Running [Receive] on EventReceiver_MockAgent',
             "EventReceiver_MockAgent options evaluated to: " + repr({'name': 'target', 'eventData': '3.14'}),
-        ]
+        ])
 
-        self.assertEqual(len(logMock.logs), len(expectedLogs))
 
-        for i in range(len(expectedLogs)):
-            self.assertEqual(logMock.logs[i], expectedLogs[i])
 
         self.assertEqual(sender2.events, [str({'data': 3.14})])
         self.assertEqual(target.events, [str({'data': 3.14, 'extraData': 42})])
