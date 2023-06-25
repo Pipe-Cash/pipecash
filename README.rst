@@ -2,11 +2,11 @@
 PIPECASH
 ========
 
-A framework for easy automation of Bitcoin related tasks. PipeCash is flexible due to it's plugin system and configuration options. Read more at http://pipe.cash/
+A framework for easy automation of Bitcoin related tasks. PipeCash is flexible due to it's plugin system and configuration options. Read more at https://pipe-cash.github.io/
 
 * License: OPEN BLOCKCHAIN-AND-FIAT-SPECIFIC LICENSE
 * Documentation: https://pipecash.readthedocs.io.
-* Website: https://pipe.cash
+* Website: https://pipe-cash.github.io/
 
 
 .. image:: https://img.shields.io/pypi/v/pipecash.svg
